@@ -1,13 +1,57 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
+
 <head>
   <meta charset="utf-8">
-  <title>ProyectoAngular</title>
+  <title>Platzi Store - Tu tienda de e-commerce</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Tienda de e-commerce moderna construida con Angular. Compra los mejores productos con la mejor experiencia de usuario.">
+  <meta name="keywords" content="e-commerce, tienda online, productos, compras, Angular">
+  <meta name="author" content="Platzi Store">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Platzi Store - Tu tienda de e-commerce">
+  <meta property="og:description" content="Tienda de e-commerce moderna construida con Angular">
+  <meta property="og:image" content="/assets/og-image.jpg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Platzi Store - Tu tienda de e-commerce">
+  <meta name="twitter:description" content="Tienda de e-commerce moderna construida con Angular">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#667eea">
+
+  <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Preconnect to API -->
+  <link rel="preconnect" href="https://api.escuelajs.co">
+  <link rel="dns-prefetch" href="https://api.escuelajs.co">
 </head>
+
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div
+      style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <div style="text-align: center; color: white;">
+        <div
+          style="width: 60px; height: 60px; border: 4px solid rgba(255, 255, 255, 0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem;">
+        </div>
+        <h2 style="font-family: system-ui, -apple-system, sans-serif; font-weight: 600;">Cargando Platzi Store...</h2>
+      </div>
+    </div>
+    <style>
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </app-root>
 </body>
+
 </html>

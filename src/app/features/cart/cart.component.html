@@ -1,0 +1,115 @@
+<div class="cart-page">
+    <div class="cart-container">
+        <div class="cart-header">
+            <button class="btn-back" (click)="continueShopping()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Continuar comprando
+            </button>
+            <h1>Carrito de Compras</h1>
+            <p class="item-count">{{ cartItems.length }} {{ cartItems.length === 1 ? 'producto' : 'productos' }}</p>
+        </div>
+
+        @if (cartItems.length === 0) {
+        <div class="empty-cart">
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <h2>Tu carrito está vacío</h2>
+            <p>Agrega productos para comenzar a comprar</p>
+            <button class="btn-primary" (click)="continueShopping()">
+                Explorar productos
+            </button>
+        </div>
+        } @else {
+        <div class="cart-content">
+            <div class="cart-items">
+                @for (item of cartItems; track item.product.id) {
+                <div class="cart-item">
+                    <div class="item-image">
+                        <img [src]="getImageUrl(item)" [alt]="item.product.title" />
+                    </div>
+
+                    <div class="item-details">
+                        <h3>{{ item.product.title }}</h3>
+                        <p class="item-category">{{ item.product.category.name }}</p>
+                        <p class="item-description">{{ item.product.description }}</p>
+                    </div>
+
+                    <div class="item-actions">
+                        <div class="quantity-control">
+                            <button class="btn-quantity" (click)="decreaseQuantity(item)"
+                                [disabled]="item.quantity <= 1">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                            <span class="quantity">{{ item.quantity }}</span>
+                            <button class="btn-quantity" (click)="increaseQuantity(item)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="item-price">COP {{ getSubtotal(item) | currency:'COP':'symbol-narrow':'1.0-0' }}
+                        </div>
+
+                        <button class="btn-remove" (click)="removeItem(item.product.id)" title="Eliminar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-card">
+                    <h2>Resumen de compra</h2>
+
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>COP {{ total | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Envío</span>
+                            <span class="free">Gratis</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span>COP {{ total | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-checkout" (click)="checkout()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
+                        </svg>
+                        Proceder al pago
+                    </button>
+
+                    <button class="btn-clear" (click)="clearCart()">
+                        Vaciar carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

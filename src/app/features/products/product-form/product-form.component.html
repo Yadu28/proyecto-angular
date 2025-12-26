@@ -1,0 +1,139 @@
+<div class="form-page">
+    <div class="form-container">
+        @if (isLoading) {
+        <div class="loading-overlay">
+            <div class="spinner-large"></div>
+            <p>Cargando producto...</p>
+        </div>
+        } @else {
+        <div class="form-header">
+            <button class="btn-back" (click)="cancel()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Volver
+            </button>
+            <h1>{{ isEditMode ? 'Editar Producto' : 'Nuevo Producto' }}</h1>
+        </div>
+
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="title">Nombre del producto *</label>
+                    <input id="title" type="text" formControlName="title" placeholder="Ej: iPhone 15 Pro Max"
+                        [class.error]="productForm.get('title')?.invalid && productForm.get('title')?.touched" />
+                    @if (productForm.get('title')?.invalid && productForm.get('title')?.touched) {
+                    <span class="error-message">{{ getErrorMessage('title') }}</span>
+                    }
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price">Precio *</label>
+                    <div class="input-with-prefix">
+                        <span class="prefix">COP $</span>
+                        <input id="price" type="number" formControlName="price" placeholder="50.000" step="1"
+                            [class.error]="productForm.get('price')?.invalid && productForm.get('price')?.touched" />
+                    </div>
+                    @if (productForm.get('price')?.invalid && productForm.get('price')?.touched) {
+                    <span class="error-message">{{ getErrorMessage('price') }}</span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Categoría *</label>
+                    <select id="category" formControlName="categoryId"
+                        [class.error]="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched">
+                        <option value="">Selecciona una categoría</option>
+                        @for (category of categories; track category.id) {
+                        <option [value]="category.id">{{ category.name }}</option>
+                        }
+                    </select>
+                    @if (productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched) {
+                    <span class="error-message">{{ getErrorMessage('categoryId') }}</span>
+                    }
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="description">Descripción *</label>
+                    <textarea id="description" formControlName="description" rows="4"
+                        placeholder="Describe el producto..."
+                        [class.error]="productForm.get('description')?.invalid && productForm.get('description')?.touched"></textarea>
+                    @if (productForm.get('description')?.invalid && productForm.get('description')?.touched) {
+                    <span class="error-message">{{ getErrorMessage('description') }}</span>
+                    }
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <label>Imágenes del producto *</label>
+                    <button type="button" class="btn-add-image" (click)="addImageField()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Agregar imagen
+                    </button>
+                </div>
+
+                <div formArrayName="images" class="images-grid">
+                    @for (control of images.controls; track $index; let i = $index) {
+                    <div class="image-upload-wrapper">
+                        <div class="image-preview"
+                            [style.backgroundImage]="control.value ? 'url(' + control.value + ')' : null"
+                            (click)="fileInput.click()" [class.has-image]="control.value">
+                            @if (!control.value) {
+                            <div class="upload-placeholder">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                <span>Seleccionar imagen</span>
+                            </div>
+                            }
+                        </div>
+                        <input #fileInput type="file" (change)="onFileSelected($event, i)" accept="image/*"
+                            style="display: none" />
+
+                        @if (images.length > 1) {
+                        <button type="button" class="btn-remove-thumb" (click)="removeImageField(i)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="cancel()" [disabled]="isSubmitting || isUploading">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-primary" [disabled]="isSubmitting || isUploading">
+                    @if (isSubmitting) {
+                    <span class="spinner"></span>
+                    {{ isEditMode ? 'Actualizando...' : 'Creando...' }}
+                    } @else if (isUploading) {
+                    <span class="spinner"></span>
+                    Subiendo imagen...
+                    } @else {
+                    {{ isEditMode ? 'Actualizar Producto' : 'Crear Producto' }}
+                    }
+                </button>
+            </div>
+        </form>
+        }
+    </div>
+</div>
