@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -10,7 +10,7 @@ import { ToastService } from '../../../core/services/toast.service';
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, RouterModule],
     templateUrl: './product-form.component.html',
-    styleUrls: ['./product-form.component.scss']
+    styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent implements OnInit {
     private fb = inject(FormBuilder);
@@ -20,12 +20,11 @@ export class ProductFormComponent implements OnInit {
     private toastService = inject(ToastService);
 
     productForm: FormGroup;
-    categories: Category[] = [];
-    isEditMode = false;
-    productId?: number;
-    isLoading = false;
-    isSubmitting = false;
-    isUploading = false;
+    categories = signal<Category[]>([]);
+    isEditMode = signal<boolean>(false);
+    productId = signal<number | undefined>(undefined);
+    isLoading = signal<boolean>(false);
+    isSubmitting = signal<boolean>(false);
 
     constructor() {
         this.productForm = this.fb.group({
@@ -42,9 +41,9 @@ export class ProductFormComponent implements OnInit {
 
         this.route.params.subscribe(params => {
             if (params['id']) {
-                this.isEditMode = true;
-                this.productId = +params['id'];
-                this.loadProduct(this.productId);
+                this.isEditMode.set(true);
+                this.productId.set(+params['id']);
+                this.loadProduct(this.productId()!);
             }
         });
     }
@@ -56,7 +55,7 @@ export class ProductFormComponent implements OnInit {
     loadCategories(): void {
         this.productService.getCategories().subscribe({
             next: (categories) => {
-                this.categories = categories;
+                this.categories.set(categories);
             },
             error: (error) => {
                 this.toastService.error('Error al cargar categorías');
@@ -66,7 +65,7 @@ export class ProductFormComponent implements OnInit {
     }
 
     loadProduct(id: number): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.productService.getProduct(id).subscribe({
             next: (product) => {
                 this.productForm.patchValue({
@@ -79,19 +78,31 @@ export class ProductFormComponent implements OnInit {
                 // Clear and populate images
                 this.images.clear();
                 if (product.images && product.images.length > 0) {
-                    product.images.forEach(image => {
+                    // Handle potential JSON string in image array
+                    let imageList: string[] = [];
+                    if (product.images[0].startsWith('[')) {
+                        try {
+                            imageList = JSON.parse(product.images[0]);
+                        } catch (e) {
+                            imageList = product.images;
+                        }
+                    } else {
+                        imageList = product.images;
+                    }
+
+                    imageList.forEach(image => {
                         this.images.push(this.fb.control(image, Validators.required));
                     });
                 } else {
                     this.images.push(this.fb.control('', Validators.required));
                 }
 
-                this.isLoading = false;
+                this.isLoading.set(false);
             },
             error: (error) => {
                 this.toastService.error('Error al cargar el producto');
                 console.error('Error loading product:', error);
-                this.isLoading = false;
+                this.isLoading.set(false);
                 this.router.navigate(['/products']);
             }
         });
@@ -101,31 +112,6 @@ export class ProductFormComponent implements OnInit {
         this.images.push(this.fb.control('', Validators.required));
     }
 
-    onFileSelected(event: any, index: number): void {
-        const file = event.target.files[0];
-        if (file) {
-            // Show preview immediately using local URL or reader
-            const reader = new FileReader();
-            reader.onload = () => {
-                // We could use this as a temporary preview, but let's just upload
-            };
-            reader.readAsDataURL(file);
-
-            this.isUploading = true; // Block submit during upload
-            this.productService.uploadFile(file).subscribe({
-                next: (response) => {
-                    this.images.at(index).setValue(response.location);
-                    this.isUploading = false;
-                },
-                error: (error) => {
-                    this.toastService.error('Error al subir la imagen');
-                    console.error('Upload error:', error);
-                    this.isUploading = false;
-                }
-            });
-        }
-    }
-
     removeImageField(index: number): void {
         if (this.images.length > 1) {
             this.images.removeAt(index);
@@ -133,8 +119,8 @@ export class ProductFormComponent implements OnInit {
     }
 
     onSubmit(): void {
-        if (this.productForm.valid && !this.isSubmitting) {
-            this.isSubmitting = true;
+        if (this.productForm.valid && !this.isSubmitting()) {
+            this.isSubmitting.set(true);
             const formValue = this.productForm.value;
 
             const productData = {
@@ -145,28 +131,27 @@ export class ProductFormComponent implements OnInit {
                 images: formValue.images.filter((img: string) => img.trim())
             };
 
-            const operation = this.isEditMode && this.productId
-                ? this.productService.updateProduct(this.productId, productData)
+            const prodId = this.productId();
+            const operation = this.isEditMode() && prodId
+                ? this.productService.updateProduct(prodId, productData)
                 : this.productService.createProduct(productData);
 
             operation.subscribe({
                 next: () => {
-                    const message = this.isEditMode
+                    const message = this.isEditMode()
                         ? 'Producto actualizado correctamente'
                         : 'Producto creado correctamente';
                     this.toastService.success(message);
                     this.router.navigate(['/products']);
+                    this.isSubmitting.set(false);
                 },
                 error: (error) => {
-                    const message = this.isEditMode
+                    const message = this.isEditMode()
                         ? 'Error al actualizar el producto'
                         : 'Error al crear el producto';
                     this.toastService.error(message);
                     console.error('Error saving product:', error);
-                    this.isSubmitting = false;
-                },
-                complete: () => {
-                    this.isSubmitting = false;
+                    this.isSubmitting.set(false);
                 }
             });
         } else {

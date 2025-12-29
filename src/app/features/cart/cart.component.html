@@ -9,10 +9,10 @@
                 Continuar comprando
             </button>
             <h1>Carrito de Compras</h1>
-            <p class="item-count">{{ cartItems.length }} {{ cartItems.length === 1 ? 'producto' : 'productos' }}</p>
+            <p class="item-count">{{ cartItems().length }} {{ cartItems().length === 1 ? 'producto' : 'productos' }}</p>
         </div>
 
-        @if (cartItems.length === 0) {
+        @if (cartItems().length === 0) {
         <div class="empty-cart">
             <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
                 <circle cx="9" cy="21" r="1"></circle>
@@ -28,7 +28,7 @@
         } @else {
         <div class="cart-content">
             <div class="cart-items">
-                @for (item of cartItems; track item.product.id) {
+                @for (item of cartItems(); track item.product.id) {
                 <div class="cart-item">
                     <div class="item-image">
                         <img [src]="getImageUrl(item)" [alt]="item.product.title" />
@@ -83,7 +83,7 @@
                     <div class="summary-details">
                         <div class="summary-row">
                             <span>Subtotal</span>
-                            <span>COP {{ total | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                            <span>COP {{ total() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
                         </div>
                         <div class="summary-row">
                             <span>Envío</span>
@@ -91,7 +91,7 @@
                         </div>
                         <div class="summary-row total">
                             <span>Total</span>
-                            <span>COP {{ total | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                            <span>COP {{ total() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
                         </div>
                     </div>
 

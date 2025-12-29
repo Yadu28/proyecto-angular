@@ -10,7 +10,7 @@ import { ToastService } from '../../core/services/toast.service';
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, RouterModule],
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
     private fb = inject(FormBuilder);
@@ -63,7 +63,7 @@ export class LoginComponent {
             return 'Este campo es requerido';
         }
         if (control?.hasError('email')) {
-            return 'Ingresa un email válido';
+            return 'Ingresa un Gmail válido';
         }
         if (control?.hasError('minlength')) {
             return 'La contraseña debe tener al menos 4 caracteres';

@@ -8,14 +8,14 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">Gmail</label>
         <div class="input-wrapper">
           <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
             <polyline points="22,6 12,13 2,6"></polyline>
           </svg>
-          <input id="email" type="email" formControlName="email" placeholder="tu@email.com"
+          <input id="email" type="email" formControlName="email" placeholder="john@mail.com"
             [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
         </div>
         @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
@@ -32,7 +32,7 @@
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
           <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
-            placeholder="Ingresa tu contraseña"
+            placeholder="changeme"
             [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" />
           <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
             @if (showPassword) {
@@ -66,9 +66,15 @@
     </form>
 
     <div class="demo-credentials">
-      <p>Credenciales de prueba:</p>
-      <code>Email: john@mail.com</code>
-      <code>Password: changeme</code>
+      <p>CUENTA DE INGRESO:</p>
+      <div class="cred-item">
+        <label>Gmail:</label>
+        <code>john@mail.com</code>
+      </div>
+      <div class="cred-item">
+        <label>Contraseña:</label>
+        <code>changeme</code>
+      </div>
     </div>
   </div>
 </div>

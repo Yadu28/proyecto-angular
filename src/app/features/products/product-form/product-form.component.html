@@ -1,6 +1,6 @@
 <div class="form-page">
     <div class="form-container">
-        @if (isLoading) {
+        @if (isLoading()) {
         <div class="loading-overlay">
             <div class="spinner-large"></div>
             <p>Cargando producto...</p>
@@ -14,7 +14,7 @@
                 </svg>
                 Volver
             </button>
-            <h1>{{ isEditMode ? 'Editar Producto' : 'Nuevo Producto' }}</h1>
+            <h1>{{ isEditMode() ? 'Editar Producto' : 'Nuevo Producto' }}</h1>
         </div>
 
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
@@ -47,7 +47,7 @@
                     <select id="category" formControlName="categoryId"
                         [class.error]="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched">
                         <option value="">Selecciona una categoría</option>
-                        @for (category of categories; track category.id) {
+                        @for (category of categories(); track category.id) {
                         <option [value]="category.id">{{ category.name }}</option>
                         }
                     </select>
@@ -78,39 +78,30 @@
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
-                        Agregar imagen
+                        Agregar otra URL
                     </button>
                 </div>
 
-                <div formArrayName="images" class="images-grid">
+                <div formArrayName="images" class="images-list">
                     @for (control of images.controls; track $index; let i = $index) {
-                    <div class="image-upload-wrapper">
-                        <div class="image-preview"
-                            [style.backgroundImage]="control.value ? 'url(' + control.value + ')' : null"
-                            (click)="fileInput.click()" [class.has-image]="control.value">
-                            @if (!control.value) {
-                            <div class="upload-placeholder">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    <div class="image-url-group">
+                        <div class="url-input-wrapper">
+                            <input type="url" [formControlName]="i" placeholder="https://ejemplo.com/imagen.jpg"
+                                [class.error]="control.invalid && control.touched" />
+                            @if (images.length > 1) {
+                            <button type="button" class="btn-remove-url" (click)="removeImageField(i)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
-                                <span>Seleccionar imagen</span>
-                            </div>
+                            </button>
                             }
                         </div>
-                        <input #fileInput type="file" (change)="onFileSelected($event, i)" accept="image/*"
-                            style="display: none" />
-
-                        @if (images.length > 1) {
-                        <button type="button" class="btn-remove-thumb" (click)="removeImageField(i)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="3">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
+                        @if (control.value) {
+                        <div class="mini-preview">
+                            <img [src]="control.value" alt="Preview" (error)="$event.target.style.display='none'">
+                        </div>
                         }
                     </div>
                     }
@@ -118,18 +109,15 @@
             </div>
 
             <div class="form-actions">
-                <button type="button" class="btn-secondary" (click)="cancel()" [disabled]="isSubmitting || isUploading">
+                <button type="button" class="btn-secondary" (click)="cancel()" [disabled]="isSubmitting()">
                     Cancelar
                 </button>
-                <button type="submit" class="btn-primary" [disabled]="isSubmitting || isUploading">
-                    @if (isSubmitting) {
+                <button type="submit" class="btn-primary" [disabled]="isSubmitting()">
+                    @if (isSubmitting()) {
                     <span class="spinner"></span>
-                    {{ isEditMode ? 'Actualizando...' : 'Creando...' }}
-                    } @else if (isUploading) {
-                    <span class="spinner"></span>
-                    Subiendo imagen...
+                    {{ isEditMode() ? 'Actualizando...' : 'Creando...' }}
                     } @else {
-                    {{ isEditMode ? 'Actualizar Producto' : 'Crear Producto' }}
+                    {{ isEditMode() ? 'Actualizar Producto' : 'Crear Producto' }}
                     }
                 </button>
             </div>

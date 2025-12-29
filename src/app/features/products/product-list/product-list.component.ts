@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -12,7 +12,7 @@ import { AuthService } from '../../../core/services/auth.service';
     standalone: true,
     imports: [CommonModule, FormsModule, RouterModule],
     templateUrl: './product-list.component.html',
-    styleUrls: ['./product-list.component.scss']
+    styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
     private productService = inject(ProductService);
@@ -21,34 +21,51 @@ export class ProductListComponent implements OnInit {
     private router = inject(Router);
     public authService = inject(AuthService);
 
-    products: Product[] = [];
-    filteredProducts: Product[] = [];
-    categories: Category[] = [];
-    isLoading = false;
-    searchQuery = '';
-    selectedCategory: number | null = null;
-    cartItemCount = 0;
+    products = signal<Product[]>([]);
+    categories = signal<Category[]>([]);
+    isLoading = signal<boolean>(false);
+    searchQuery = signal<string>('');
+    selectedCategory = signal<number | null>(null);
+    cartItemCount = signal<number>(0);
+
+    filteredProducts = computed(() => {
+        let filtered = this.products();
+        const query = this.searchQuery().toLowerCase().trim();
+        const catId = this.selectedCategory();
+
+        if (query) {
+            filtered = filtered.filter(p =>
+                p.title.toLowerCase().includes(query) ||
+                p.description.toLowerCase().includes(query)
+            );
+        }
+
+        if (catId) {
+            filtered = filtered.filter(p => p.category.id === catId);
+        }
+
+        return filtered;
+    });
 
     ngOnInit(): void {
         this.loadProducts();
         this.loadCategories();
         this.cartService.cartItems$.subscribe(items => {
-            this.cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+            this.cartItemCount.set(items.reduce((sum, item) => sum + item.quantity, 0));
         });
     }
 
     loadProducts(): void {
-        this.isLoading = true;
-        this.productService.getProducts().subscribe({
+        this.isLoading.set(true);
+        this.productService.getProducts(100).subscribe({
             next: (products) => {
-                this.products = products;
-                this.filteredProducts = products;
-                this.isLoading = false;
+                this.products.set(products);
+                this.isLoading.set(false);
             },
             error: (error) => {
                 this.toastService.error('Error al cargar productos');
                 console.error('Error loading products:', error);
-                this.isLoading = false;
+                this.isLoading.set(false);
             }
         });
     }
@@ -56,7 +73,7 @@ export class ProductListComponent implements OnInit {
     loadCategories(): void {
         this.productService.getCategories().subscribe({
             next: (categories) => {
-                this.categories = categories;
+                this.categories.set(categories);
             },
             error: (error) => {
                 console.error('Error loading categories:', error);
@@ -65,37 +82,16 @@ export class ProductListComponent implements OnInit {
     }
 
     onSearch(): void {
-        this.applyFilters();
+        // Computed signal handles this automatically
     }
 
     onCategoryChange(): void {
-        this.applyFilters();
-    }
-
-    applyFilters(): void {
-        let filtered = this.products;
-
-        // Filter by search query
-        if (this.searchQuery.trim()) {
-            const query = this.searchQuery.toLowerCase();
-            filtered = filtered.filter(product =>
-                product.title.toLowerCase().includes(query) ||
-                product.description.toLowerCase().includes(query)
-            );
-        }
-
-        // Filter by category
-        if (this.selectedCategory) {
-            filtered = filtered.filter(product => product.category.id === this.selectedCategory);
-        }
-
-        this.filteredProducts = filtered;
+        // Computed signal handles this automatically
     }
 
     clearFilters(): void {
-        this.searchQuery = '';
-        this.selectedCategory = null;
-        this.filteredProducts = this.products;
+        this.searchQuery.set('');
+        this.selectedCategory.set(null);
     }
 
     addToCart(product: Product): void {
@@ -142,8 +138,19 @@ export class ProductListComponent implements OnInit {
     }
 
     getImageUrl(product: Product): string {
-        return product.images && product.images.length > 0
-            ? product.images[0]
-            : 'https://via.placeholder.com/400x300?text=No+Image';
+        try {
+            const images = product.images;
+            if (images && images.length > 0) {
+                let img = images[0];
+                if (img.startsWith('[')) {
+                    const parsed = JSON.parse(img);
+                    return parsed[0];
+                }
+                return img;
+            }
+        } catch (e) {
+            console.error('Error parsing product image:', e);
+        }
+        return 'https://via.placeholder.com/400x300?text=No+Image';
     }
 }

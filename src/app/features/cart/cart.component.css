@@ -1,0 +1,317 @@
+.cart-page {
+    min-height: 100vh;
+    background: var(--white);
+    padding: 4rem 1rem;
+}
+
+.cart-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cart-header {
+    margin-bottom: 3.5rem;
+}
+
+.cart-header .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--gray-500);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+}
+
+.cart-header .btn-back:hover {
+    color: var(--dark);
+    transform: translateX(-5px);
+}
+
+.cart-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.cart-header .item-count {
+    color: var(--gray-400);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.empty-cart {
+    background: var(--gray-50);
+    padding: 6rem 2rem;
+    text-align: center;
+    border: 1px solid var(--gray-100);
+}
+
+.empty-cart h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.empty-cart p {
+    color: var(--gray-500);
+    margin-bottom: 2.5rem;
+}
+
+.empty-cart .btn-primary {
+    display: inline-flex;
+    padding: 1.125rem 2.5rem;
+    background: var(--primary);
+    color: var(--white);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.3s;
+}
+
+.empty-cart .btn-primary:hover {
+    background: var(--gray-800);
+    letter-spacing: 0.15em;
+}
+
+.cart-content {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 4rem;
+    align-items: start;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.cart-item {
+    background: var(--white);
+    padding-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 2rem;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.cart-item .item-image {
+    width: 140px;
+    height: 140px;
+    background: var(--gray-50);
+}
+
+.cart-item .item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.2);
+}
+
+.cart-item .item-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cart-item .item-details h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.cart-item .item-category {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+}
+
+/* Multiline clamp with cross-browser fallback */
+.cart-item .item-description {
+    color: var(--gray-500);
+    font-size: 0.875rem;
+    line-height: 1.25rem;                  /* ensure consistent height calculation */
+
+    /* WebKit multiline clamp */
+    display: -webkit-box;
+
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    /* Better fallback for non-WebKit browsers (e.g. Firefox) */
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-height: calc(1.25rem * 2);         /* 2 lines as fallback */
+    overflow-wrap: anywhere;               /* avoid overflowing long words */
+}
+
+.cart-item .item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.cart-item .item-actions .item-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.cart-item .item-actions .quantity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--gray-200);
+}
+
+.cart-item .btn-quantity {
+    width: 36px;
+    height: 36px;
+    background: var(--white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark);
+    font-weight: 700;
+}
+
+.cart-item .btn-quantity:hover {
+    background: var(--gray-50);
+}
+
+.cart-item .btn-quantity:disabled {
+    color: var(--gray-300);
+}
+
+.cart-item .quantity {
+    min-width: 2.5rem;
+    text-align: center;
+    font-weight: 800;
+    font-size: 0.875rem;
+}
+
+.cart-item .btn-remove {
+    background: transparent;
+    border: none;
+    color: var(--gray-300);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cart-item .btn-remove:hover {
+    color: #ff4d4d;
+}
+
+.cart-summary .summary-card {
+    background: var(--gray-50);
+    padding: 2.5rem;
+    border: 1px solid var(--gray-100);
+}
+
+.cart-summary .summary-card h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.cart-summary .summary-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--gray-200);
+    margin-bottom: 2rem;
+}
+
+.cart-summary .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-500);
+}
+
+.cart-summary .summary-row.total {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.cart-summary .btn-checkout {
+    width: 100%;
+    padding: 1.25rem;
+    background: var(--primary);
+    color: var(--white);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    transition: all 0.3s;
+}
+
+.cart-summary .btn-checkout:hover {
+    background: var(--gray-800);
+    letter-spacing: 0.15em;
+}
+
+.cart-summary .btn-clear {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    color: var(--gray-400);
+    border: none;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+}
+
+.cart-summary .btn-clear:hover {
+    color: #ff4d4d;
+}
+
+@media (max-width: 992px) {
+    .cart-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .cart-item {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-item .item-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .cart-item .item-actions {
+        flex-direction: row;
+        align-items: center;
+    }
+}

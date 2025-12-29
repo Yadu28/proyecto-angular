@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { CartService, CartItem } from '../../core/services/cart.service';
@@ -9,15 +9,15 @@ import { ToastService } from '../../core/services/toast.service';
     standalone: true,
     imports: [CommonModule, RouterModule],
     templateUrl: './cart.component.html',
-    styleUrls: ['./cart.component.scss']
+    styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
     private cartService = inject(CartService);
     private toastService = inject(ToastService);
     private router = inject(Router);
 
-    cartItems: CartItem[] = [];
-    total = 0;
+    cartItems = signal<CartItem[]>([]);
+    total = signal<number>(0);
 
     ngOnInit(): void {
         this.loadCart();
@@ -25,8 +25,8 @@ export class CartComponent implements OnInit {
 
     loadCart(): void {
         this.cartService.cartItems$.subscribe(items => {
-            this.cartItems = items;
-            this.total = this.cartService.getCartTotal();
+            this.cartItems.set(items);
+            this.total.set(this.cartService.getCartTotal());
         });
     }
 
@@ -60,7 +60,7 @@ export class CartComponent implements OnInit {
     }
 
     checkout(): void {
-        if (this.cartItems.length === 0) {
+        if (this.cartItems().length === 0) {
             this.toastService.warning('El carrito está vacío');
             return;
         }
@@ -76,9 +76,20 @@ export class CartComponent implements OnInit {
     }
 
     getImageUrl(item: CartItem): string {
-        return item.product.images && item.product.images.length > 0
-            ? item.product.images[0]
-            : 'https://via.placeholder.com/150?text=No+Image';
+        try {
+            const images = item.product.images;
+            if (images && images.length > 0) {
+                let img = images[0];
+                if (img.startsWith('[')) {
+                    const parsed = JSON.parse(img);
+                    return parsed[0];
+                }
+                return img;
+            }
+        } catch (e) {
+            console.error('Error parsing product image in cart:', e);
+        }
+        return 'https://via.placeholder.com/150?text=No+Image';
     }
 
     getSubtotal(item: CartItem): number {

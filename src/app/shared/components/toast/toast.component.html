@@ -1,7 +1,7 @@
 <div class="toast-container">
     @if (toastService.toasts$ | async; as toasts) {
     @for (toast of toasts; track toast.id) {
-    <div class="toast" [class]="'toast-' + toast.type">
+    <div class="toast" [ngClass]="'toast-' + toast.type">
         <div class="toast-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path [attr.d]="getIcon(toast.type)"></path>
