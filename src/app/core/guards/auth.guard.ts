@@ -7,6 +7,18 @@ export const authGuard: CanActivateFn = (route, state) => {
     const router = inject(Router);
 
     if (authService.isAuthenticated()) {
+        const isGuest = authService.isGuest();
+        const url = state.url;
+
+        // Restrictions for Guest users
+        if (isGuest) {
+            // Block access to creation, editing and cart
+            if (url.includes('/create') || url.includes('/edit/') || url === '/cart') {
+                router.navigate(['/products']);
+                return false;
+            }
+        }
+
         return true;
     }
 

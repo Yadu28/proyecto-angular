@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService, Product } from '../../../core/services/product.service';
 import { CartService } from '../../../core/services/cart.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -18,6 +19,7 @@ export class ProductDetailComponent implements OnInit {
     private productService = inject(ProductService);
     private cartService = inject(CartService);
     private toastService = inject(ToastService);
+    public authService = inject(AuthService);
 
     product = signal<Product | undefined>(undefined);
     isLoading = signal<boolean>(true);

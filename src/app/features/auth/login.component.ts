@@ -57,6 +57,10 @@ export class LoginComponent {
         this.showPassword = !this.showPassword;
     }
 
+    loginAsGuest(): void {
+        this.authService.loginAsGuest();
+    }
+
     getErrorMessage(controlName: string): string {
         const control = this.loginForm.get(controlName);
         if (control?.hasError('required')) {
