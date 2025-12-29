@@ -1,8 +1,8 @@
-# 🚀 Guía de Despliegue en Vercel - Platzi Store
+# Guía de Despliegue en Vercel - Platzi Store
 
-Esta guía te mostrará cómo desplegar tu aplicación Angular en Vercel paso a paso.
 
-## 📋 Pre-requisitos
+
+##  Pre-requisitos
 
 - [ ] Cuenta en GitHub
 - [ ] Cuenta en Vercel (puedes registrarte con GitHub)
@@ -106,7 +106,7 @@ Para desplegar a producción:
 vercel --prod
 ```
 
-## 🔧 Configuración Avanzada
+##  Configuración Avanzada
 
 ### Archivo vercel.json
 

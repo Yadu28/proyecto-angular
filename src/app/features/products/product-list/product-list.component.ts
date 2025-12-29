@@ -82,11 +82,11 @@ export class ProductListComponent implements OnInit {
     }
 
     onSearch(): void {
-        // Computed signal handles this automatically
+
     }
 
     onCategoryChange(): void {
-        // Computed signal handles this automatically
+
     }
 
     clearFilters(): void {

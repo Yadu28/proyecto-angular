@@ -75,10 +75,10 @@ export class ProductFormComponent implements OnInit {
                     categoryId: product.category.id
                 });
 
-                // Clear and populate images
+                // limpia arreglo de imagenes
                 this.images.clear();
                 if (product.images && product.images.length > 0) {
-                    // Handle potential JSON string in image array
+                    // verifica si hay imagenes
                     let imageList: string[] = [];
                     if (product.images[0].startsWith('[')) {
                         try {

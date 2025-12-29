@@ -1,6 +1,6 @@
 # Guía de Desarrollo - Platzi Store
 
-## 📚 Estructura del Proyecto
+##  Estructura del Proyecto
 
 ### Organización de Carpetas
 
@@ -33,7 +33,7 @@ src/app/
         └── toast/                  # Notificaciones toast
 ```
 
-## 🔐 Autenticación
+##  Autenticación
 
 ### Flujo de Autenticación
 
@@ -63,7 +63,7 @@ src/app/
 }
 ```
 
-## 🛒 Gestión del Carrito
+##  Gestión del Carrito
 
 ### Almacenamiento
 
@@ -96,7 +96,7 @@ const total = cartService.getCartTotal();
 const count = cartService.getCartItemCount();
 ```
 
-## 📦 API de Productos
+##  API de Productos
 
 ### Endpoints Utilizados
 
@@ -129,7 +129,7 @@ DELETE /api/v1/products/:id
 GET /api/v1/categories
 ```
 
-## 🎨 Sistema de Diseño
+##  Sistema de Diseño
 
 ### Paleta de Colores
 
@@ -187,7 +187,7 @@ $radius-xl: 20px;
 $radius-full: 50%;
 ```
 
-## 🔧 Configuración de Desarrollo
+##  Configuración de Desarrollo
 
 ### Variables de Entorno
 
@@ -215,7 +215,7 @@ private readonly API_URL = 'https://api.escuelajs.co/api/v1';
 - Budgets de bundle configurados
 - Optimizaciones de producción activadas
 
-## 📱 Responsive Design
+## Responsive Design
 
 ### Breakpoints
 
@@ -243,7 +243,7 @@ Usamos CSS Grid nativo:
 }
 ```
 
-## 🧪 Testing (Configuración Básica)
+##  Testing (Configuración Básica)
 
 ### Estructura de Tests
 
@@ -257,7 +257,7 @@ Usamos CSS Grid nativo:
 npm test
 ```
 
-## 🚀 Despliegue
+##  Despliegue
 
 ### Proceso de Build
 
@@ -287,7 +287,7 @@ El archivo `vercel.json` ya está configurado con:
 - Rewrites para SPA routing
 - Security headers
 
-## 🔒 Seguridad
+##  Seguridad
 
 ### Medidas Implementadas
 
@@ -307,7 +307,7 @@ El archivo `vercel.json` ya está configurado con:
 - [ ] Añadir CSRF protection
 - [ ] Implementar Content Security Policy
 
-## 📊 Optimizaciones de Performance
+## Optimizaciones de Performance
 
 ### Implementadas
 
@@ -324,7 +324,7 @@ El archivo `vercel.json` ya está configurado con:
 - [ ] Implementar caching estratégico
 - [ ] Optimizar imágenes con CDN
 
-## 🐛 Debugging
+##  Debugging
 
 ### Herramientas Angular DevTools
 
@@ -347,7 +347,7 @@ this.productService.getProducts().subscribe({
 });
 ```
 
-## 📈 Métricas y Monitoreo
+##  Métricas y Monitoreo
 
 ### Para Implementar en Producción
 
@@ -356,7 +356,7 @@ this.productService.getProducts().subscribe({
 3. **Lighthouse:** Performance audits
 4. **Web Vitals:** Core metrics monitoring
 
-## 🤝 Contribuciones
+##  Contribuciones
 
 ### Workflow de Git
 
@@ -378,14 +378,4 @@ git push origin feature/nueva-funcionalidad
 - **Formatting:** Prettier configurado
 - **Linting:** ESLint con reglas de Angular
 
-## 📚 Recursos Adicionales
 
-- [Angular Documentation](https://angular.io/docs)
-- [Platzi Fake API Docs](https://fakeapi.platzi.com)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-- [SCSS Guide](https://sass-lang.com/guide)
-
----
-
-**Última actualización:** Diciembre 2024
-**Versión:** 1.0.0

@@ -10,9 +10,9 @@ export const authGuard: CanActivateFn = (route, state) => {
         const isGuest = authService.isGuest();
         const url = state.url;
 
-        // Restrictions for Guest users
+        // invitado solo puede ver productos
         if (isGuest) {
-            // Block access to creation, editing and cart
+            // validaciones de rutas restringidas
             if (url.includes('/create') || url.includes('/edit/') || url === '/cart') {
                 router.navigate(['/products']);
                 return false;
