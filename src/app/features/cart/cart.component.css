@@ -143,23 +143,22 @@
     margin-bottom: 0.75rem;
 }
 
-/* Multiline clamp with cross-browser fallback */
+/* dentro del carrito */
 .cart-item .item-description {
     color: var(--gray-500);
     font-size: 0.875rem;
-    line-height: 1.25rem;                  /* ensure consistent height calculation */
+    line-height: 1.25rem;
 
-    /* WebKit multiline clamp */
+
     display: -webkit-box;
-
     -webkit-box-orient: vertical;
     overflow: hidden;
 
-    /* Better fallback for non-WebKit browsers (e.g. Firefox) */
+
     text-overflow: ellipsis;
     white-space: normal;
-    max-height: calc(1.25rem * 2);         /* 2 lines as fallback */
-    overflow-wrap: anywhere;               /* avoid overflowing long words */
+    max-height: calc(1.25rem * 2);
+    overflow-wrap: anywhere;
 }
 
 .cart-item .item-actions {
