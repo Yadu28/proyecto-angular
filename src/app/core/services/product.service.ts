@@ -106,7 +106,30 @@ export class ProductService {
 
     getCategories(): Observable<Category[]> {
         return this.http.get<Category[]>(`${this.API_URL}/categories`).pipe(
-            map(categories => categories.map(c => this.translateCategory(c)))
+            map(categories => {
+                return categories
+                    .map(c => this.translateCategory(c))
+                    .filter(c => {
+                        const name = c.name.toLowerCase();
+                        // Filter out common junk patterns
+                        const isJunk =
+                            name.includes('new category') ||
+                            name.includes('different category') ||
+                            name.includes('@') ||
+                            name.includes('test') ||
+                            name.includes('string') ||
+                            name.includes('generic') ||
+                            name.includes('copy') ||
+                            name.includes('grocery') ||
+                            name.includes('bag') ||
+                            name.match(/[0-9]/) || // Has numbers
+                            name.length < 2 ||
+                            name === 'asdf' ||
+                            name === 'things';
+
+                        return !isJunk;
+                    });
+            })
         );
     }
 
